@@ -1,6 +1,12 @@
 #JSGF V1.0;
-/**
- * JSGF Grammar for Hello World example
- */
-grammar hello;
-public <question> = jenkins ( what time is it | what day is it | what is the date | say hello );
+grammar commands;
+public <basicCmd> = <signal> <startPolite> <command> <endPolite>;
+<signal> = (jenkins);
+<startPolite> = [ can you | could you ] [ please ];
+<command> = ( /8/<say> | /8/<open> | /6/<close> | /5/<play> );
+    <say> = ( say | tell me | tell us ) ( hello | goodbye | the weather | the temperature | a joke );
+    <play> = play ( [ some ] music | something );
+    <open> = ( open | turn on ) <target>;
+    <close> = ( close | turn off ) <target>;
+        <target> = ( the lights | the television );
+<endPolite> = [ please ];
