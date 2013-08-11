@@ -3,6 +3,7 @@ import pygst
 pygst.require('0.10')
 gobject.threads_init()
 import gst
+from commands import Interpreter
 
 class Listener(object):
     """
@@ -16,6 +17,9 @@ class Listener(object):
         # Init gstreamer
         self.init_gstreamer()
 
+        # Get an interpreter
+        self.interpreter = Interpreter()
+
         # Start listening
         if start:
             self.start()
@@ -28,7 +32,7 @@ class Listener(object):
         asr = self.pipeline.get_by_name('asr')
 
         # Bind the pipeline results
-        asr.connect('partial_result', self.asr_result)
+        # asr.connect('partial_result', self.asr_partial_result)
         asr.connect('result', self.asr_result)
 
         # Load the grammar file (generated from the jsgf file)
@@ -58,7 +62,7 @@ class Listener(object):
         Does something with the recognized sentence. Override this function
         to define custom functionality.
         """
-        print(parsed_text)
+        self.interpreter.match(parsed_text)
 
 # Get a listener
 listener = Listener()
