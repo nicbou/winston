@@ -1,44 +1,16 @@
 from listener import Listener
 from interpreter import *
-from commands.say import say
+from commands import Command
+from commands.say import SayCommand, sayTime
+
+# The list of commands passed to the interpreter
 commands = []
 
-# Prepare some sommands
-sayKeywords = (
-    'say',
-    'tell me',
-    'tell us',
-)
-thingsToSay = (
-    'a joke',
-    'goodbye',
-    'hello',
-    'the date',
-    'the time',
-    'the weather',
-)
-commands.append(Command(name='say', verbs=sayKeywords, subjects=thingsToSay, callback=say))
+# A command defined by extending the Command object
+commands.append(SayCommand(name='say'))
 
-# jenkins, play ...
-playKeywords = (
-    'play',
-)
-thingsToPlay = (
-    '(some )?music',  # jenkins, play (some) music
-)
-commands.append(Command(name='play', verbs=playKeywords, subjects=thingsToPlay, callback=play))
-
-# jenkins, turn on ...
-openKeywords = (
-    'open',
-    'turn on',
-)
-thingsToOpen = (
-    'the television',
-    'the lights',
-    'the door',
-)
-commands.append(Command(name='open', verbs=openKeywords, subjects=thingsToOpen, callback=open))
+# A command defined by instanciating the Command object
+commands.append(Command(name='whatTime', actions=('what time is it',), callback=sayTime))
 
 # Load the commands in the interpreter
 interpreter = Interpreter(commands=commands)
