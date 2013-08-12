@@ -23,7 +23,7 @@ class Command(object):
         if subject in self.subjects:
             self.callback(subject)
         else:
-            raise Exception("Subject {0} does not exist for command {1}".format(subject, self.name))
+            print("Subject {0} does not exist for command {1}".format(subject, self.name))
 
     @property
     def regex(self):

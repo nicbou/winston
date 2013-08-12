@@ -49,7 +49,9 @@ class Listener(object):
         Receives a result from the pipeline, and forwards the parsed
         text to process_result, which is intended to be overridden.
         """
+        self.pause()
         self.process_result(parsed_text)
+        self.start()
 
     def start(self):
         self.pipeline.set_state(gst.STATE_PLAYING)

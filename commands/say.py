@@ -1,6 +1,6 @@
-from os import system
 from datetime import datetime
 from random import choice
+from utils.texttospeech import spell_integer, text_to_speech
 
 def say(what):
     """
@@ -43,7 +43,7 @@ def sayHello():
         'Hi there',
         'Howdy',
     )
-    textToSpeech(choice(greetings))
+    text_to_speech(choice(greetings))
 
 def sayGoodbye():
     goodbyes = (
@@ -53,7 +53,7 @@ def sayGoodbye():
         'See you later',
         'See you soon',
     )
-    textToSpeech(choice(goodbyes)) 
+    text_to_speech(choice(goodbyes)) 
 
 def sayTime():
     time = datetime.now().time()
@@ -66,8 +66,8 @@ def sayTime():
         'It currently is',
         'The current time is',
     )
-    readable_time = "{0} {1} {2}".format(choice(intro), hours, minutes)
-    textToSpeech(readable_time)
+    readable_time = "{0} {1} {2}".format(choice(intro), spell_integer(hours), spell_integer(minutes))
+    text_to_speech(readable_time)
 
 def sayDate():
     intro = (
@@ -76,17 +76,21 @@ def sayDate():
     )
     date = datetime.now().strftime("%B %d")
     readable_date = "{0} {1}".format(choice(intro), date)
-    textToSpeech(readable_date)
+    text_to_speech(readable_date)
 
 def sayJoke():
-    textToSpeech("Too soon")
+    jokes = (
+        "My quad-core processor allows me to make very fast, very accurate mistakes.",
+        "The past, the present, and the future walk into a bar. It was tense.",
+        "What does myself and a neutrino have in common? We're both constantly penetrating your mom.",
+        "What do they do to dead chemists? Barium.",
+        "The majority of people have an above average number of legs.",
+        "How many programmers does it take to change a light bulb? None. It's a hardware problem.",
+        "An SQL query walks into a bar, goes up to two tables and asks to join them.",
+        "Time flies like an arrow. Fruit flies like a banana.",
+
+    )
+    text_to_speech(choice(jokes) + " Ha ha ha.")
 
 def sayWeather():
-    textToSpeech("It gon'rain, nigga")
-
-def textToSpeech(text):
-    """
-    Sends a command for TTS processing
-    """
-    # This is linux-specific. Use the say command on OS X
-    system('echo "%s" | festival --tts' % text)
+    text_to_speech("It gon'rain, nigga")
