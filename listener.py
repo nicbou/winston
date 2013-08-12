@@ -3,22 +3,22 @@ import pygst
 pygst.require('0.10')
 gobject.threads_init()
 import gst
-from commands import Interpreter
 
 class Listener(object):
     """
     Listens, understands and processes speeches using the
     python-gstreamer plugin.
     """
-    def __init__(self, start=True):
+    def __init__(self, interpreter, start=True):
         """
         Initialize the listener
         """
+
         # Init gstreamer
         self.init_gstreamer()
 
         # Get an interpreter
-        self.interpreter = Interpreter()
+        self.interpreter = interpreter
 
         # Start listening
         if start:
@@ -63,9 +63,3 @@ class Listener(object):
         to define custom functionality.
         """
         self.interpreter.match(parsed_text)
-
-# Get a listener
-listener = Listener()
-
-# And wait...
-raw_input()
