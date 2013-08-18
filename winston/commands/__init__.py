@@ -12,28 +12,32 @@ class Command(object):
     object gives you the ability to keep application state and redefine how commands are
     dispatched.
     """
-    def __init__(self, actions=[], subjects=[], callback=None, name='command'):
+    def __init__(self, actions=[], subjects=[], callback=None, name='command', interpreter=None, always_active=False):
         self.name = name  # Used as a named group identifier in the regex
         self.actions = actions
         self.subjects = subjects
         self.callback = callback
+        self.interpreter = interpreter  # Reference to the interpreter that will run this command
+        self.always_active = always_active  # This command will not run when the interpreter is inactive
 
     def dispatch(self, subject):
         """
         Dispatches the command to the callback with the specified subject
         as a callback. Easily overridden.
         """
-        # Validate the existence of a subject, if any are specified
-        if not self.subjects:
-            self.callback()
-        elif isinstance(self.subjects, (tuple, list)) and subject in self.subjects:
-            # Match a subject list
-            self.callback(subject)
-        elif (not isinstance(self.subjects, (tuple, list))) and re.match(self.subjects, subject):
-            # Match a regex subject
-            self.callback(subject)
-        else:
-            print("Subject {0} does not exist for command {1}".format(subject, self.name))
+        # Don't perform actions if the interpreter isn't active
+        if self.interpreter.active or (not self.interpreter) or self.always_active:
+            # Validate the existence of a subject, if any are specified
+            if not self.subjects:
+                self.callback()
+            elif isinstance(self.subjects, (tuple, list)) and subject in self.subjects:
+                # Match a subject list
+                self.callback(subject)
+            elif (not isinstance(self.subjects, (tuple, list))) and re.match(self.subjects, subject):
+                # Match a regex subject
+                self.callback(subject)
+            else:
+                print("Subject {0} does not exist for command {1}".format(subject, self.name))
 
     @property
     def regex(self, group_name=None):

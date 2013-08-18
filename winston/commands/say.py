@@ -16,8 +16,6 @@ class SayCommand(Command):
             'tell us',
         ]
         subjects = [
-            'goodbye',
-            'hello',
             'the date',
             'the time',
             'the weather',
@@ -26,55 +24,14 @@ class SayCommand(Command):
         super(SayCommand, self).__init__(actions=actions, subjects=subjects, callback=callback, name=name)
 
     def say(self, what):
-        if what == "hello":
-            sayHello()
-        elif what == "the time":
+        if what == "the time":
             sayTime()
-        elif what == "goodbye":
-            sayGoodbye()
         elif what == "the date":
             sayDate()
         elif what == "the weather":
             sayWeather()
         else:
             print("Unexpected subject {0} for command {1}".format(self.name, what))
-
-
-def sayHello():
-    """
-    Returns a random, personalized greeting
-    """
-    current_hour = datetime.now().time().hour
-    period = 'day'
-    if current_hour > 4 and current_hour < 12:
-        period = 'morning'
-    elif current_hour > 12 and current_hour < 17:
-        period = 'afternoon'
-    elif current_hour > 16 and current_hour < 5:
-        period = 'night'
-
-    greetings = (
-        'Good %s' % period,
-        'Good %s' % period,
-        'Greetings',
-        'Hello there',
-        'Hello',
-        'Hello, sir',
-        'Hi',
-        'Hi there',
-        'Howdy',
-    )
-    text_to_speech(choice(greetings))
-
-def sayGoodbye():
-    goodbyes = (
-        'Goodbye',
-        'Cheerio!',
-        'Farewell',
-        'See you later',
-        'See you soon',
-    )
-    text_to_speech(choice(goodbyes)) 
 
 def sayTime():
     time = datetime.now().time()

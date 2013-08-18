@@ -4,6 +4,9 @@ class Interpreter(object):
     """
     The interpreter turns matches commands with functions. It strongly relies
     on the Command object, bundling them together into a bigger regex.
+
+    Strings come from the Listener, which is just a wrapper around pocketsphinx.
+    It only returns lowercase strings without punctuation.
     """
 
     # The name with which all commands begin. Can be a word or a regex.
@@ -21,8 +24,20 @@ class Interpreter(object):
         """
         Prepares the interpreter, compile the regex strings
         """
+        # Keep a reference to the interpreter
+        for command in commands:
+            command.interpreter = self
+
         self.commands = commands
-        self.regex = self.regex()
+        self.regex = self.regex()  # Build the command matcher
+
+        # Commands can access self.interpreter.active and decide whether or not
+        # to perform an action. Commands can also "shut down" winston by setting
+        # active to false.
+
+        # We still let the commands go through so a command can reactivate an
+        # interpreter.
+        self.active = True
 
     def regex(self):
         """
@@ -56,6 +71,9 @@ class Interpreter(object):
             groups = result.groupdict()  # Get all the group matches from the regex
 
             print("Got '%s'" % command)
+
+            if not self.active:
+                print("(interpreter is inactive)")
 
             for command in self.commands:
                 # Check if the command name matches a regex group

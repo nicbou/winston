@@ -6,6 +6,7 @@ from commands import Command
 from commands.say import SayCommand, sayTime
 from commands.open_door import OpenDoorCommand
 from commands.set_alarm import AlarmCommand
+from commands.activate import ActivateCommand
 import os
 
 # The grammar.fsg is a finite state grammar file generated from jsgf.txt
@@ -18,6 +19,7 @@ grammar_file = os.path.join(script_path, "grammar.fsg")
 commands = []
 
 # Commands defined by extending the Command object
+commands.append(ActivateCommand(name='activate'))  # Can deactivate/activate winston
 commands.append(SayCommand(name='say'))
 commands.append(OpenDoorCommand(name='openDoor'))
 commands.append(AlarmCommand(name='setAlarm'))
