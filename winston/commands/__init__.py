@@ -24,7 +24,11 @@ class Command(object):
         # Validate the existence of a subject, if any are specified
         if not self.subjects:
             self.callback()
-        elif subject in self.subjects:
+        elif isinstance(self.subjects, (tuple, list)) and subject in self.subjects:
+            # Match a subject list
+            self.callback(subject)
+        elif (not isinstance(self.subjects, (tuple, list))) and re.match(self.subjects, subject):
+            # Match a regex subject
             self.callback(subject)
         else:
             print("Subject {0} does not exist for command {1}".format(subject, self.name))
@@ -37,10 +41,21 @@ class Command(object):
         # Build the command
         # e.g. (open|turn on) (the lights|the television)
         if self.subjects:
+            regex_actions = self.actions
+            regex_subjects = self.subjects
+
+            # If the actions is a list (and not a regex), join it into a single regex:
+            if isinstance(self.actions, (tuple, list)):
+                regex_actions = "|".join(regex_actions)
+
+            # If the subjects is a list (and not a regex), join it into a single regex:
+            if isinstance(self.subjects, (tuple, list)):
+                regex_subjects = "|".join(regex_subjects)
+
             command = "({actions}) (?P<{name}Subject>({subject}))".format(
                 name = self.name,
-                actions = "|".join(self.actions),
-                subject = "|".join(self.subjects),
+                actions = regex_actions,
+                subject = regex_subjects,
             )
         else:
             command = "({actions})".format(
