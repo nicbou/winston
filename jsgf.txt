@@ -1,6 +1,6 @@
 #JSGF V1.0;
 grammar commands;
-public <basicCmd> = <signal> <startPolite> <command> <endPolite>;
+public <basicCmd> = (/10/<ignore> | /3/<signal> <startPolite> <command> <endPolite>);
 <signal> = (jenkins);
 <startPolite> = [ can you | could you ] [ please ];
 <command> = ( /8/<say> | /8/<open> | /8/<do> | /8/<question> | /6/<close> | /5/<play> );
@@ -16,3 +16,5 @@ public <basicCmd> = <signal> <startPolite> <command> <endPolite>;
         <target> = the ( lights | television );
     <play> = play ( [ some ] music | something );
 <endPolite> = [ please ];
+
+<ignore> = ( a | the | will | can | be )*;
