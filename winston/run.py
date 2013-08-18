@@ -5,6 +5,7 @@ from interpreter import *
 from commands import Command
 from commands.say import SayCommand, sayTime
 from commands.open_door import OpenDoorCommand
+from commands.set_alarm import AlarmCommand
 import os
 
 # The grammar.fsg is a finite state grammar file generated from jsgf.txt
@@ -19,6 +20,7 @@ commands = []
 # Commands defined by extending the Command object
 commands.append(SayCommand(name='say'))
 commands.append(OpenDoorCommand(name='openDoor'))
+commands.append(AlarmCommand(name='setAlarm'))
 
 # A command defined by instanciating the Command object
 commands.append(Command(name='whatTime', actions=('what time is it',), callback=sayTime))
