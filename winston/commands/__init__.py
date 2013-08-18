@@ -1,3 +1,5 @@
+import re
+
 class Command(object):
     """
     Stores a command:
