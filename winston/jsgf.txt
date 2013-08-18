@@ -1,7 +1,7 @@
 #JSGF V1.0;
 grammar commands;
 public <basicCmd> = (/10/<junkHoneypot> | /3/<signal> <startPolite> <command> <endPolite>);
-<signal> = (jenkins);
+<signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
 <command> = ( /8/<say> | /8/<open> | /8/<do> | /8/<question> | /6/<close> | /5/<play> );
     <say> = ( say | tell me | tell us ) <thingToSay>;

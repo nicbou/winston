@@ -8,7 +8,7 @@ class Interpreter(object):
 
     # The name with which all commands begin. Can be a word or a regex.
     # Example: jenkins, alfred, robot. "Jenkins! Turn on the lights!"
-    signal = "jenkins"
+    signal = "winston"
 
     # Command prefixes and suffixes. Can be a tuple of words or a regex
     prefixes = "( can you| could you)?( please)?"
