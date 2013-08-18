@@ -8,11 +8,18 @@ class Listener(object):
     """
     Listens, understands and processes speeches using the
     python-gstreamer plugin.
+
+    This class is loosely based on the example from the anemic
+    official documentation.
     """
-    def __init__(self, interpreter, start=True):
+    def __init__(self, interpreter, fsg_path="grammar.fsg", start=True):
         """
         Initialize the listener
         """
+        # Set the path to the finite state grammar (FSG) file
+        # Don't have an FSG? Use sphinx_jsgf2fsg, or set it to None
+        # to run pocketsphinx without a grammar (not recommended).
+        self.fsg_path = fsg_path
 
         # Init gstreamer
         self.init_gstreamer()
@@ -35,8 +42,11 @@ class Listener(object):
         # asr.connect('partial_result', self.asr_partial_result)
         asr.connect('result', self.asr_result)
 
-        # Load the grammar file (generated from the jsgf file)
-        asr.set_property("fsg", "grammar.fsg")
+        # Load the grammar file unless it was deactivated
+        if self.fsg_path:
+            asr.set_property("fsg", self.fsg_path)
+
+        # This tells the asr that it's ready to run
         asr.set_property('configured', True)
 
         bus = self.pipeline.get_bus()
