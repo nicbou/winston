@@ -101,7 +101,11 @@ def sayDate():
 
 def sayWeather():
     city = 'montreal'
-    data = urlopen('http://openweathermap.org/data/2.1/find/name?q={0}&units=metric'.format(city))
+    try:
+        data = urlopen('http://openweathermap.org/data/2.1/find/name?q={0}&units=metric'.format(city), timeout=5)
+    except:
+        text_to_speech("I am afraid I cannot get the weather, sorry.")
+
     cities = load(data)
 
     if cities['count'] == 0:
