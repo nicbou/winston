@@ -5,7 +5,7 @@ public <basicCmd> = ( (GARBAGE)+ | <signal> <startPolite> <command> <endPolite>)
 <startPolite> = [ can you | could you ] [ please ];
 <command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> );
 
-    <say> = ( say | tell me | tell us ) <thingToSay>;
+    <say> = ( say | tell me | tell us | hello to our guests ) <thingToSay>;
         <thingToSay> = ( the weather | the temperature | the time | the date );
 
     <activate> = ( say hello | [time to] wake up | get back to work );
