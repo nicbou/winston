@@ -19,6 +19,7 @@ class SayCommand(Command):
             'the date',
             'the time',
             'the weather',
+            'the temperature',
             'my account balance',
         ]
         callback = self.say
@@ -29,7 +30,7 @@ class SayCommand(Command):
             sayTime()
         elif what == "the date":
             sayDate()
-        elif what == "the weather":
+        elif what == "the weather" or what == "the temperature":
             sayWeather()
         elif what == "my account balance":
             sayBalance()
