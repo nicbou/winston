@@ -22,14 +22,13 @@ class DeactivateCommand(Command):
         """
         self.interpreter.active = False
         goodbyes = (
-            'Goodbye',
-            'Cheerio!',
-            'Farewell',
-            'See you later',
-            'See you soon',
+            'I will remain silent sir.',
+            'Farewell sir',
+            'I will see you later sir.',
+            'See you soon sir.',
             'You will be missed, sir.',
-            'Have a nice day',
-            'Going to sleep, sir',
-            'Deactivating',
+            'Have a nice day sir',
+            'I am going to sleep sir',
+            'Deactivating myself sir',
         )
         text_to_speech(choice(goodbyes))

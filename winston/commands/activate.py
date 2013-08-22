@@ -33,9 +33,12 @@ class ActivateCommand(Command):
         greetings = (
             'Good %s' % period,
             'Good %s, sir' % period,
+            'Good %s, sir. I am all ears.' % period,
             'Greetings sir',
+            'Greetings sir. Is there anything I can do for you?',
             'Hello sir',
             'Hello sir. I missed you.',
             'I am all ears sir',
+            'Hello sir. What can I do for you?',
         )
         text_to_speech(choice(greetings))
