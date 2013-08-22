@@ -3,11 +3,22 @@ grammar commands;
 public <basicCmd> = ( (GARBAGE)+ | <signal> <startPolite> <command> <endPolite>);
 <signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
-<command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> );
+<command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> );
+
     <say> = ( say | tell me | tell us ) <thingToSay>;
         <thingToSay> = ( the weather | the temperature | the time | the date );
+
     <activate> = ( say hello | [time to] wake up | get back to work );
     <deactivate> = ( say goodbye | go to sleep | deactivate yourself | stop listening );
+    <accountBalance> = 
+        (
+            [tell me | show me | read me ]
+            (
+                ( (what's | what is [there] | how much [do] i have | how much (is there|there is) ) in my [bank] account )
+                | ( (what's | what is) my [bank] account balance [like] )
+            )
+        )
+        | ( give me my account balance );
     <do> = ( <setAlarm> );
         <setAlarm> = ( set an alarm | wake me up | wake us up ) [ tomorrow ] at <time>;
             <time> = ( six | seven | eight | nine | ten | eleven ) [ fifteen | thirty | forty five ] [ tomorrow ];
