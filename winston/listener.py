@@ -12,7 +12,7 @@ class Listener(object):
     This class is loosely based on the example from the anemic
     official documentation.
     """
-    def __init__(self, interpreter, fsg_path="grammar.fsg", start=True):
+    def __init__(self, interpreter, fsg_path="grammar.fsg", dict_path="dict.dic", start=True):
         """
         Initialize the listener
         """
@@ -20,6 +20,7 @@ class Listener(object):
         # Don't have an FSG? Use sphinx_jsgf2fsg, or set it to None
         # to run pocketsphinx without a grammar (not recommended).
         self.fsg_path = fsg_path
+        self.dict_path = dict_path
 
         # Init gstreamer
         self.init_gstreamer()
@@ -45,6 +46,7 @@ class Listener(object):
         # Load the grammar file unless it was deactivated
         if self.fsg_path:
             asr.set_property("fsg", self.fsg_path)
+            asr.set_property("dict", self.dict_path)
 
         # This tells the asr that it's ready to run
         asr.set_property('configured', True)
