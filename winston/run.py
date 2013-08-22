@@ -14,6 +14,7 @@ import os
 # commands. 
 script_path = os.path.dirname(__file__)
 grammar_file = os.path.join(script_path, "grammar.fsg")
+dict_file = os.path.join(script_path, "dict.dic")
 
 # The list of commands passed to the interpreter
 commands = []
@@ -31,7 +32,7 @@ commands.append(Command(name='whatTime', actions=('what time is it',), callback=
 interpreter = Interpreter(commands=commands)
 
 # Get a listener. The grammar argument is optional, see Listener's doc for details
-listener = Listener(interpreter=interpreter, fsg_path=grammar_file)
+listener = Listener(interpreter=interpreter, fsg_path=grammar_file, dict_path=dict_file)
 
 # And wait...
 raw_input()
