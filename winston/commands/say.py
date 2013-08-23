@@ -31,8 +31,6 @@ class SayCommand(Command):
             sayDate()
         elif what == "the weather" or what == "the temperature":
             sayWeather()
-        elif what == "my account balance":
-            sayBalance()
         else:
             print("Unexpected subject {0} for command {1}".format(self.name, what))
 

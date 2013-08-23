@@ -1,6 +1,6 @@
 #JSGF V1.0;
 grammar commands;
-public <basicCmd> = ( (GARBAGE)+ | <signal> <startPolite> <command> <endPolite>);
+public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <endPolite>));
 <signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
 <command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> );
