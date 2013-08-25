@@ -42,7 +42,7 @@ class ActivateCommand(Command):
 
         greetings = (
             'Good %s' % period,
-            'Good %s' % period,
+            'Good %s, sir' % period,
             'Greetings',
             'Hello there',
             'Hello',
@@ -50,6 +50,7 @@ class ActivateCommand(Command):
             'Hi',
             'Hi there',
             'Howdy',
+            'Hello sir. I will miss your absence.',
         )
         text_to_speech(choice(greetings))
 
@@ -64,5 +65,7 @@ class ActivateCommand(Command):
             'Farewell',
             'See you later',
             'See you soon',
+            'You will be missed, sir.',
+            'Have a nice day',
         )
         text_to_speech(choice(goodbyes))

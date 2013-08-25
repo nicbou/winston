@@ -4,17 +4,25 @@ Winston is a voice-activated virtual assistant meant to be used in home automati
 
 ## Setup
 
+### Requirements
+
 To use Winston, you will need the following packages:
 
 * `gstreamer0.10-pocketsphinx`
 * `python-gst0.10`
 * `python-gobject`
 
-There is a file called run.py that will run winston from the command line. Make sure to open it as it contains a very simple example that will show you how to define commands. By default, run.py uses grammar.fsg, and will recognize these commands. Feel free to define your own grammar and commands.
-
-Once installed, run winston by running winston/run.py, or by importing the required modules in your own project.
+You will also need `festival` so Winston can reply back to you. If you are using OS X, you can replace the call in utils.texttospeech.text_to_speech command to use the much better `say` command.
 
 *Note: there might be packages which I forgot about, so do not hesitate to open an issue or send an email if the instructions are incomplete or unclear. I take these to heart, and will respond as quickly as possible.*
+
+### Creating commands
+
+There is a file called run.py that will run winston from the command line. Make sure to open it as it contains a very simple example that will show you how to define commands. By default, run.py uses grammar.fsg, and will recognize these commands. Feel free to define your own grammar and commands.
+
+### Running Winston
+
+Once installed, run winston by running winston/run.py, or by importing the required modules in your own project.
 
 ## Creating commands
 

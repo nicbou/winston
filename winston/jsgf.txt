@@ -1,11 +1,11 @@
 #JSGF V1.0;
 grammar commands;
-public <basicCmd> = (/10/<junkHoneypot> | /3/<signal> <startPolite> <command> <endPolite>);
+public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <endPolite>));
 <signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
 <command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> );
     <say> = ( say | tell me | tell us ) <thingToSay>;
-        <thingToSay> = ( hello | goodbye | the weather | the temperature | a joke | the time | the date );
+        <thingToSay> = ( hello | goodbye | the weather | the temperature | the time | the date );
     <do> = ( <setAlarm> );
         <setAlarm> = ( set an alarm | wake me up | wake us up ) [ tomorrow ] at <time>;
             <time> = ( six | seven | eight | nine | ten | eleven ) [ fifteen | thirty | forty five ] [ tomorrow ];
@@ -14,5 +14,3 @@ public <basicCmd> = (/10/<junkHoneypot> | /3/<signal> <startPolite> <command> <e
     <openDoor> = ( open | unlock ) the door;
     <play> = play ( [ some ] music | something );
 <endPolite> = [ please ];
-
-<junkHoneypot> = ( a | the | will | can | be )*;
