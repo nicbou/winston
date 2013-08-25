@@ -5,7 +5,7 @@ from interpreter import *
 from commands import Command
 from commands.say import SayCommand, sayTime
 from commands.open_door import OpenDoorCommand
-from commands.set_alarm import AlarmCommand
+from commands.set_alarm import AbsoluteAlarmCommand, RelativeAlarmCommand
 from commands.activate import ActivateCommand
 from commands.deactivate import DeactivateCommand
 from commands.account_balance import AccountBalanceCommand
@@ -27,7 +27,8 @@ commands.append(DeactivateCommand(name='deactivate'))  # Can deactivate winston
 commands.append(AccountBalanceCommand(name='account_balance'))
 commands.append(SayCommand(name='say'))
 commands.append(OpenDoorCommand(name='openDoor'))
-commands.append(AlarmCommand(name='setAlarm'))
+commands.append(AbsoluteAlarmCommand(name='set_abs_alarm'))
+commands.append(RelativeAlarmCommand(name='set_rel_alarm'))
 
 # A command defined by instanciating the Command object
 commands.append(Command(name='whatTime', actions=('what time is it',), callback=sayTime))

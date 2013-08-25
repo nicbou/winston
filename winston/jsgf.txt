@@ -20,8 +20,12 @@ public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <e
         )
         | ( give me my account balance );
     <do> = ( <setAlarm> );
-        <setAlarm> = ( set an alarm | wake me up | wake us up ) [ tomorrow ] at <time>;
-            <time> = ( six | seven | eight | nine | ten | eleven ) [ fifteen | thirty | forty five ] [ tomorrow ];
+        <setAlarm> = ( set (an alarm|a reminder) | (ring|wake) (me|us) up ) ([ tomorrow ] at <absoluteTime> | in <relativeTime> (minutes|hours) [from now]);
+            <absoluteTime> = ( six | seven | eight | nine | ten | eleven ) [ fifteen | thirty | forty five ] [ tomorrow ];
+            <relativeTime> = ( <oneToTen> | <elevenToNineteen> | <twentyToNinety> );
+                <oneToTen> = ( one | two | three | four | five | six | seven | eight | nine | ten );
+                <elevenToNineteen> = ( eleven | twelve | thirteen | fourteen | fifteen | sixteen | seventeen | eighteen | nineteen );
+                <twentyToNinety> = ( twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety ) [<oneToTen>];
     <question> = ( what time is it | what day is it | <nextBus> );
         <nextBus> = when will the next bus pass;
     <openDoor> = ( open | unlock ) the door;
