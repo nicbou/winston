@@ -78,7 +78,7 @@ class Interpreter(object):
             for command in self.commands:
                 # Check if the command name matches a regex group
                 if command.name in groups and groups[command.name] is not None:
-                    print('matched ' + command.name)
+                    print('matched ' + command.__class__.__name__)
                     subject = None
                     if command.subjects:
                         subject = groups[command.name + 'Subject']  # The group of the subject ('the lights' in 'turn on the lights')
