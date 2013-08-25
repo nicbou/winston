@@ -3,7 +3,6 @@ import pygst
 pygst.require('0.10')
 gobject.threads_init()
 import gst
-import os
 
 class Listener(object):
     """

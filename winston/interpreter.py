@@ -24,9 +24,10 @@ class Interpreter(object):
         """
         Prepares the interpreter, compile the regex strings
         """
-        # Keep a reference to the interpreter
-        for command in commands:
+        # Keep a reference to the interpreter, give command a unique name
+        for index, command in enumerate(commands):
             command.interpreter = self
+            command.name = 'cmd' + str(index)  # Every command needs a unique name. Any valid regex group name will do.
 
         self.commands = commands
         self.regex = self.regex()  # Build the command matcher

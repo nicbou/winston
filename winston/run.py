@@ -22,14 +22,14 @@ dict_file = os.path.join(script_path, "dict.dic")
 # The list of commands passed to the interpreter
 commands = [
     # Commands defined by extending the Command object
-    ActivateCommand(name='activate'),  # Can activate winston
-    DeactivateCommand(name='deactivate'),  # Can deactivate winston
-    AccountBalanceCommand(name='account_balance'),
-    SayCommand(name='say'),
-    OpenDoorCommand(name='openDoor'),
-    AbsoluteAlarmCommand(name='set_abs_alarm'),
-    RelativeAlarmCommand(name='set_rel_alarm'),
-    NextBusCommand(name='next_bus'),
+    SayCommand(),  # Simple command to get started
+    ActivateCommand(),  # Can activate winston
+    DeactivateCommand(),  # Can deactivate winston
+    AccountBalanceCommand(),  # Lots of variation, uses regex actions
+    OpenDoorCommand(),
+    AbsoluteAlarmCommand(),
+    RelativeAlarmCommand(),
+    NextBusCommand(),
 ]
 
 # A command defined by instanciating the Command object
