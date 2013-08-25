@@ -5,8 +5,11 @@ from interpreter import *
 from commands import Command
 from commands.say import SayCommand, sayTime
 from commands.open_door import OpenDoorCommand
-from commands.set_alarm import AlarmCommand
+from commands.set_alarm import AbsoluteAlarmCommand, RelativeAlarmCommand
 from commands.activate import ActivateCommand
+from commands.deactivate import DeactivateCommand
+from commands.account_balance import AccountBalanceCommand
+from commands.next_bus import NextBusCommand
 import os
 
 # The grammar.fsg is a finite state grammar file generated from jsgf.txt
@@ -17,13 +20,17 @@ grammar_file = os.path.join(script_path, "grammar.fsg")
 dict_file = os.path.join(script_path, "dict.dic")
 
 # The list of commands passed to the interpreter
-commands = []
-
-# Commands defined by extending the Command object
-commands.append(ActivateCommand(name='activate'))  # Can deactivate/activate winston
-commands.append(SayCommand(name='say'))
-commands.append(OpenDoorCommand(name='openDoor'))
-commands.append(AlarmCommand(name='setAlarm'))
+commands = [
+    # Commands defined by extending the Command object
+    ActivateCommand(name='activate'),  # Can activate winston
+    DeactivateCommand(name='deactivate'),  # Can deactivate winston
+    AccountBalanceCommand(name='account_balance'),
+    SayCommand(name='say'),
+    OpenDoorCommand(name='openDoor'),
+    AbsoluteAlarmCommand(name='set_abs_alarm'),
+    RelativeAlarmCommand(name='set_rel_alarm'),
+    NextBusCommand(name='next_bus'),
+]
 
 # A command defined by instanciating the Command object
 commands.append(Command(name='whatTime', actions=('what time is it',), callback=sayTime))

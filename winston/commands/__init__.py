@@ -46,6 +46,7 @@ class Command(object):
         """
         # Build the command
         # e.g. (open|turn on) (the lights|the television)
+        command = ""
         if self.subjects:
             regex_actions = self.actions
             regex_subjects = self.subjects
@@ -64,9 +65,15 @@ class Command(object):
                 subject = regex_subjects,
             )
         else:
-            command = "({actions})".format(
-                actions = "|".join(self.actions),
-            )
+            regex_actions = self.actions
+
+            # If the actions is a list (and not a regex), join it into a single regex:
+            if isinstance(self.actions, (tuple, list)):
+                command = "({actions})".format(
+                    actions = "|".join(self.actions),
+                )
+            else:
+                command = regex_actions
 
         # Put the regex in a named group
         named_group = "(?P<{name}>({command}))".format(

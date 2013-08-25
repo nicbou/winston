@@ -20,7 +20,6 @@ class SayCommand(Command):
             'the time',
             'the weather',
             'the temperature',
-            'my account balance',
         ]
         callback = self.say
         super(SayCommand, self).__init__(actions=actions, subjects=subjects, callback=callback, name=name)
@@ -32,8 +31,6 @@ class SayCommand(Command):
             sayDate()
         elif what == "the weather" or what == "the temperature":
             sayWeather()
-        elif what == "my account balance":
-            sayBalance()
         else:
             print("Unexpected subject {0} for command {1}".format(self.name, what))
 
@@ -84,15 +81,3 @@ def sayWeather():
         )
 
         text_to_speech(output)
-
-def sayBalance():
-    """
-    Reads the account balance from selenium-td.py. The text file
-    is a human-readable string.
-    """
-    try:
-        with open('/var/www/scripts/winston_balance.txt') as file:
-            text = file.read()
-        text_to_speech(text)
-    except:
-        text_to_speech("I am afraid I cannot get your account balance, sorry.")
