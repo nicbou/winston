@@ -39,7 +39,7 @@ commands.append(Command(name='whatTime', actions=('what time is it',), callback=
 interpreter = Interpreter(commands=commands)
 
 # Get a listener. The grammar argument is optional, see Listener's doc for details
-listener = Listener(interpreter=interpreter, fsg_path=grammar_file, dict_path=dict_file)
+listener = Listener(interpreters=[interpreter], fsg_path=grammar_file, dict_path=dict_file)
 
 # And wait...
 raw_input()

@@ -10,9 +10,9 @@ class Listener(object):
     python-gstreamer plugin.
 
     This class is loosely based on the example from the anemic
-    official documentation.
+    official pocketsphinx documentation.
     """
-    def __init__(self, interpreter, fsg_path="grammar.fsg", dict_path="dict.dic", start=True):
+    def __init__(self, interpreters=[], fsg_path="grammar.fsg", dict_path="dict.dic", start=True):
         """
         Initialize the listener
         """
@@ -25,8 +25,8 @@ class Listener(object):
         # Init gstreamer
         self.init_gstreamer()
 
-        # Get an interpreter
-        self.interpreter = interpreter
+        # Set the command interpreters
+        self.interpreters = interpreters
 
         # Start listening
         if start:
@@ -59,7 +59,7 @@ class Listener(object):
     def asr_result(self, asr, parsed_text, utterance_id):
         """
         Receives a result from the pipeline, and forwards the parsed
-        text to process_result, which is intended to be overridden.
+        text to process_result.
         """
         self.pause()
         self.process_result(parsed_text)
@@ -73,7 +73,7 @@ class Listener(object):
 
     def process_result(self, parsed_text):
         """
-        Does something with the recognized sentence. Override this function
-        to define custom functionality.
+        Sends the command string to all interpreters for dispatching.
         """
-        self.interpreter.match(parsed_text)
+        for interpreter in self.interpreters:
+            interpreter.match(parsed_text)
