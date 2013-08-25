@@ -3,6 +3,7 @@ import pygst
 pygst.require('0.10')
 gobject.threads_init()
 import gst
+import os
 
 class Listener(object):
     """
@@ -12,7 +13,7 @@ class Listener(object):
     This class is loosely based on the example from the anemic
     official pocketsphinx documentation.
     """
-    def __init__(self, interpreters=[], fsg_path="grammar.fsg", dict_path="dict.dic", start=True):
+    def __init__(self, interpreters=[], fsg_path=None, dict_path=None, start=True):
         """
         Initialize the listener
         """
@@ -46,6 +47,8 @@ class Listener(object):
         # Load the grammar file unless it was deactivated
         if self.fsg_path:
             asr.set_property("fsg", self.fsg_path)
+
+        if self.dict_path:
             asr.set_property("dict", self.dict_path)
 
         # This tells the asr that it's ready to run
