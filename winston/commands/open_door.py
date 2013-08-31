@@ -29,12 +29,12 @@ def openDoor():
     All we need to do is send the arduino a byte
     """
     try:
+        text_to_speech("Opening the door")
         ser = serial.Serial('/dev/ttyACM0', 9600)
         time.sleep(2) #Deal with the stupid-ass DTR
 
         #Send a byte to the arduino, and it will open the door
         ser.write('a')
         ser.close()
-        text_to_speech("Opening the door")
     except:
         text_to_speech("I am sorry. I can't open the door.")
