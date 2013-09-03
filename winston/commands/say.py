@@ -63,21 +63,21 @@ def sayWeather():
         data = urlopen('http://openweathermap.org/data/2.1/find/name?q={0}&units=metric'.format(city), timeout=5)
     except:
         text_to_speech("I am afraid I cannot get the weather, sorry.")
-
-    cities = load(data)
-
-    if cities['count'] == 0:
-        text_to_speech("I am afraid I cannot get the weather, sorry.")
     else:
-        city = cities['list'][0]
-        current_temp = spell_integer(int(city['main']['temp']))
-        max_temp = spell_integer(int(city['main']['temp_max']))
-        current_weather = city['weather'][0]['description']
+        cities = load(data)
 
-        output = "{weather} with a temperature of {temp} and a maximum of {maxtemp}.".format(
-            weather = current_weather,
-            temp = current_temp,
-            maxtemp = max_temp,
-        )
+        if cities['count'] == 0:
+            text_to_speech("I am afraid I cannot get the weather, sorry.")
+        else:
+            city = cities['list'][0]
+            current_temp = spell_integer(int(city['main']['temp']))
+            max_temp = spell_integer(int(city['main']['temp_max']))
+            current_weather = city['weather'][0]['description']
 
-        text_to_speech(output)
+            output = "{weather} with a temperature of {temp} and a maximum of {maxtemp}.".format(
+                weather = current_weather,
+                temp = current_temp,
+                maxtemp = max_temp,
+            )
+
+            text_to_speech(output)
