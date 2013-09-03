@@ -7,7 +7,7 @@ class DinnerCommand(Command):
     Simple Q/A commands: say hello, say the time, tell us goodbye etc.
     """
     def __init__(self, name='command'):
-        actions = 'what should i eat (for (dinner|supper)|tonight)',
+        actions = 'what (should|do|can) (i|we) eat (for (dinner|supper)|tonight)',
         callback = self.say
         super(DinnerCommand, self).__init__(actions=actions, subjects=None, callback=callback, name=name)
 
