@@ -18,8 +18,8 @@ class OpenDoorCommand(Command):
         callback = self.open
         super(OpenDoorCommand, self).__init__(actions=actions, subjects=subjects, callback=callback, name=name)
 
-    def open(self, what):
-        if what == 'the door':
+    def open(self, command, subject):
+        if subject == 'the door':
             openDoor()
 
 

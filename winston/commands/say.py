@@ -24,17 +24,17 @@ class SayCommand(Command):
         callback = self.say
         super(SayCommand, self).__init__(actions=actions, subjects=subjects, callback=callback, name=name)
 
-    def say(self, what):
-        if what == "the time":
+    def say(self, command, subject):
+        if subject == "the time":
             sayTime()
-        elif what == "the date":
+        elif subject == "the date":
             sayDate()
-        elif what == "the weather" or what == "the temperature":
+        elif subject == "the weather" or subject == "the temperature":
             sayWeather()
         else:
-            print("Unexpected subject {0} for command {1}".format(self.name, what))
+            print("Unexpected subject {0} for command {1}".format(self.name, subject))
 
-def sayTime():
+def sayTime(command=None):
     time = datetime.now().time()
     hours = time.hour
     minutes = time.minute

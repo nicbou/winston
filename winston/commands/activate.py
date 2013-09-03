@@ -16,7 +16,7 @@ class ActivateCommand(Command):
         callback = self.activate
         super(ActivateCommand, self).__init__(actions=actions, callback=callback, name=name, always_active=True)
 
-    def activate(self):
+    def activate(self, command):
         """
         Activates winston and returns a random, personalized greeting
         """

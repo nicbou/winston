@@ -80,9 +80,10 @@ class Interpreter(object):
                 # Check if the command name matches a regex group
                 if command.name in groups and groups[command.name] is not None:
                     print('matched ' + command.__class__.__name__)
+                    command_string = groups[command.name]  # The command without "Winston, please ... thank you"
                     subject = None
                     if command.subjects:
                         subject = groups[command.name + 'Subject']  # The group of the subject ('the lights' in 'turn on the lights')
-                    command.dispatch(subject)
+                    command.dispatch(command_string, subject)
         else:
             print("Could not match '{0}' to a command using regex".format(command))
