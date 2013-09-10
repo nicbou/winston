@@ -3,7 +3,7 @@ grammar commands;
 public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <endPolite>));
 <signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
-<command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> );
+<command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> | /5/<mealIdea> );
 
     <say> = ( say | tell me | tell us | hello to our guests ) <thingToSay>;
         <thingToSay> = ( the weather | the temperature | the time | the date );
@@ -28,6 +28,7 @@ public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <e
                 <twentyToNinety> = ( twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety ) [<oneToTen>];
     <question> = ( what time is it | what day is it | <nextBus> );
         <nextBus> = (when will the next bus (pass|arrive|come|stop) | when is the next bus (coming|arriving|passing|expected));
+    <mealIdea> = what (should|do|can) (i|we) eat (for ( dinner | supper ) | tonight );
     <openDoor> = ( open | unlock ) the door;
     <play> = play ( [ some ] music | something );
 <endPolite> = [ please ];

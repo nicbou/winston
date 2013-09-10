@@ -20,22 +20,25 @@ class Command(object):
         self.interpreter = interpreter  # Reference to the interpreter that will run this command
         self.always_active = always_active  # This command will not run when the interpreter is inactive
 
-    def dispatch(self, subject):
+    def dispatch(self, command, subject):
         """
         Dispatches the command to the callback with the specified subject
         as a callback. Easily overridden.
+
+        command: The full matched command ('turn on the lights')
+        subject: The variable part of the command ('the lights')
         """
         # Don't perform actions if the interpreter isn't active
         if self.interpreter.active or (not self.interpreter) or self.always_active:
             # Validate the existence of a subject, if any are specified
             if not self.subjects:
-                self.callback()
+                self.callback(command)
             elif isinstance(self.subjects, (tuple, list)) and subject in self.subjects:
                 # Match a subject list
-                self.callback(subject)
+                self.callback(command, subject)
             elif (not isinstance(self.subjects, (tuple, list))) and re.match(self.subjects, subject):
                 # Match a regex subject
-                self.callback(subject)
+                self.callback(command, subject)
             else:
                 print("Subject {0} does not exist for command {1}".format(subject, self.name))
 

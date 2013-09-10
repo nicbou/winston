@@ -24,17 +24,17 @@ class SayCommand(Command):
         callback = self.say
         super(SayCommand, self).__init__(actions=actions, subjects=subjects, callback=callback, name=name)
 
-    def say(self, what):
-        if what == "the time":
+    def say(self, command, subject):
+        if subject == "the time":
             sayTime()
-        elif what == "the date":
+        elif subject == "the date":
             sayDate()
-        elif what == "the weather" or what == "the temperature":
+        elif subject == "the weather" or subject == "the temperature":
             sayWeather()
         else:
-            print("Unexpected subject {0} for command {1}".format(self.name, what))
+            print("Unexpected subject {0} for command {1}".format(self.name, subject))
 
-def sayTime():
+def sayTime(command=None):
     time = datetime.now().time()
     hours = time.hour
     minutes = time.minute
@@ -63,21 +63,21 @@ def sayWeather():
         data = urlopen('http://openweathermap.org/data/2.1/find/name?q={0}&units=metric'.format(city), timeout=5)
     except:
         text_to_speech("I am afraid I cannot get the weather, sorry.")
-
-    cities = load(data)
-
-    if cities['count'] == 0:
-        text_to_speech("I am afraid I cannot get the weather, sorry.")
     else:
-        city = cities['list'][0]
-        current_temp = spell_integer(int(city['main']['temp']))
-        max_temp = spell_integer(int(city['main']['temp_max']))
-        current_weather = city['weather'][0]['description']
+        cities = load(data)
 
-        output = "{weather} with a temperature of {temp} and a maximum of {maxtemp}.".format(
-            weather = current_weather,
-            temp = current_temp,
-            maxtemp = max_temp,
-        )
+        if cities['count'] == 0:
+            text_to_speech("I am afraid I cannot get the weather, sorry.")
+        else:
+            city = cities['list'][0]
+            current_temp = spell_integer(int(city['main']['temp']))
+            max_temp = spell_integer(int(city['main']['temp_max']))
+            current_weather = city['weather'][0]['description']
 
-        text_to_speech(output)
+            output = "{weather} with a temperature of {temp} and a maximum of {maxtemp}.".format(
+                weather = current_weather,
+                temp = current_temp,
+                maxtemp = max_temp,
+            )
+
+            text_to_speech(output)

@@ -24,7 +24,7 @@ class AccountBalanceCommand(Command):
         callback = self.say_balance
         super(AccountBalanceCommand, self).__init__(actions=actions, callback=callback, name=name)
 
-    def say_balance(self):
+    def say_balance(self, command):
         """
         Reads the account balance from selenium-td.py. The text file
         is a human-readable string.

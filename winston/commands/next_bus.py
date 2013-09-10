@@ -16,7 +16,7 @@ class NextBusCommand(Command):
         callback = self.find_bus
         super(NextBusCommand, self).__init__(actions=actions, callback=callback, name=name)
 
-    def find_bus(self):
+    def find_bus(self, command):
         """
         Get the bus schedule from the STM, return it in a readable format.
         """

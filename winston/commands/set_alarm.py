@@ -20,7 +20,7 @@ class AbsoluteAlarmCommand(Command):
 
         super(AbsoluteAlarmCommand, self).__init__(actions=self.actions, subjects=self.subjects, callback=self.set_alarm, name=name)
 
-    def set_alarm(self, when):
+    def set_alarm(self, command, when):
         # Remove the clutter
         when = when.replace('tomorrow', '')
 

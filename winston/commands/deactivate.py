@@ -16,7 +16,7 @@ class DeactivateCommand(Command):
         callback = self.deactivate
         super(DeactivateCommand, self).__init__(actions=actions, callback=callback, name=name, always_active=True)
 
-    def deactivate(self):
+    def deactivate(self, command):
         """
         Deactivates winston
         """
