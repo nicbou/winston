@@ -1,5 +1,6 @@
 from utils.texttospeech import text_to_speech
 from commands import Command
+from config import BALANCE_PATH
 
 class AccountBalanceCommand(Command):
     """
@@ -30,7 +31,7 @@ class AccountBalanceCommand(Command):
         is a human-readable string.
         """
         try:
-            with open('/var/www/scripts/winston_balance.txt') as file:
+            with open(BALANCE_PATH) as file:
                 text = file.read()
             text_to_speech(text)
         except:
