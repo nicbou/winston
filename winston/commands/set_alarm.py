@@ -54,6 +54,10 @@ class RelativeAlarmCommand(Command):
         super(RelativeAlarmCommand, self).__init__(actions=self.actions, subjects=self.subjects, callback=self.set_alarm, name=name)
 
     def set_alarm(self, when):
+        """
+        Sets an alarm using the 'at' command.
+        """
+
         # Remove the clutter
         when.replace(' minutes', '')
         when.replace(' from now', '')
