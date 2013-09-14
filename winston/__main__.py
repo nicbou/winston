@@ -6,9 +6,10 @@ from commands.open_door import OpenDoorCommand
 from commands.set_alarm import AbsoluteAlarmCommand, RelativeAlarmCommand
 from commands.activate import ActivateCommand
 from commands.deactivate import DeactivateCommand
-from commands.account_balance import AccountBalanceCommand
+from commands.account_balance import AccountBalanceCommand, say_balance
 from commands.next_bus import NextBusCommand
 from commands.dinner import DinnerCommand
+from apscheduler.scheduler import Scheduler
 import os
 
 def main():
@@ -41,8 +42,13 @@ def main():
     # A command defined by instanciating the Command object
     commands.append(Command(name='whatTime', actions=('what time is it',), callback=sayTime))
 
+    # Define and start a scheduler. These store tasks that are run at given times
+    scheduler = Scheduler()
+    scheduler.start()
+    scheduler.add_cron_job(say_balance, hour=18, minute=00)  # Reads the account balance at 17:30, daily
+
     # Load the commands in the interpreter
-    interpreter = Interpreter(commands=commands)
+    interpreter = Interpreter(commands=commands, scheduler=scheduler)
 
     # Get a listener. The grammar argument is optional, see Listener's doc for details
     listener = Listener(interpreters=[interpreter], fsg_path=grammar_file, dict_path=dict_file)
