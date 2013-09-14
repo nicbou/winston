@@ -7,5 +7,6 @@ setup(name='winston',
       author='Nicolas Bouliane',
       author_email='contact@nicolasbouliane.com',
       license='LGPL',
+      requires=['ping'],
       packages=['winston']
       )
