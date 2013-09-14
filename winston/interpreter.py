@@ -24,9 +24,10 @@ class Interpreter(object):
         """
         Prepares the interpreter, compile the regex strings
         """
-        # Keep a reference to the scheduler so commands can use it
-        self.scheduler = scheduler
 
+        # Keep a reference to the scheduler
+        self.scheduler = scheduler
+        
         # Keep a reference to the interpreter, give command a unique name
         for index, command in enumerate(commands):
             command.interpreter = self
