@@ -12,6 +12,9 @@ class Command(object):
     object gives you the ability to keep application state and redefine how commands are
     dispatched.
     """
+    _interpreter = None
+    _callback = None
+
     def __init__(self, actions=[], subjects=[], callback=None, name='command', interpreter=None, always_active=False):
         self.name = name  # Used as a named group identifier in the regex
         self.actions = actions
@@ -86,3 +89,27 @@ class Command(object):
 
         # Return a regex pattern string
         return named_group
+
+    @property
+    def interpreter(self):
+        return self._interpreter
+
+    @interpreter.setter
+    def interpreter(self, value):
+        """
+        Since this function is called when the interpreter is set,
+        this is the perfect place to attach initiation logic that
+        concerns the command's Interpreter.
+
+        For example, this is the place to add events to the interpreter's
+        scheduler.
+        """
+        self._interpreter = value
+
+    @property
+    def callback(self):
+        return self._callback
+
+    @callback.setter
+    def callback(self, value):
+        self._callback = value

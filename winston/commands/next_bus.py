@@ -1,8 +1,9 @@
-from utils.texttospeech import text_to_speech
-from json import load
-from urllib2 import urlopen
 from commands import Command
+from config import BUS_SCHEDULE_URL
+from json import load
 from time import strptime, strftime
+from urllib2 import urlopen
+from utils.texttospeech import text_to_speech
 
 class NextBusCommand(Command):
     """
@@ -25,7 +26,7 @@ class NextBusCommand(Command):
         direction = 'N'
 
         try:
-            data = urlopen('http://i-www.stm.info/en/lines/{line}/stops/{stop}/arrivals?direction={direction}&limit=5'.format(line=line, stop=stop, direction=direction), timeout=5)
+            data = urlopen(BUS_SCHEDULE_URL.format(line=line, stop=stop, direction=direction), timeout=5)
             results = load(data)['result']
         except:
             text_to_speech('Sorry, I cannot retrieve the bus schedule at the moment.')

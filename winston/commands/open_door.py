@@ -1,5 +1,6 @@
 from utils.texttospeech import text_to_speech
 from commands import Command
+from config import ARDUINO_PATH, ARDUINO_BAUD_RATE
 import serial
 import time
 
@@ -30,11 +31,12 @@ def openDoor():
     """
     try:
         text_to_speech("Opening the door")
-        ser = serial.Serial('/dev/ttyACM0', 9600)
+        ser = serial.Serial(ARDUINO_PATH, ARDUINO_BAUD_RATE)
         time.sleep(2) #Deal with the stupid-ass DTR
 
         #Send a byte to the arduino, and it will open the door
         ser.write('a')
         ser.close()
     except:
+        # Gracefully handle an offline arduino
         text_to_speech("I am sorry. I can't open the door.")
