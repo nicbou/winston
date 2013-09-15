@@ -5,28 +5,18 @@ from commands import Command
 
 class ActivateCommand(Command):
     """
-    Enables/disables winston
+    Activates winston's interpreter
     """
     def __init__(self, name='command'):
         actions = [
-            'say',
+            'say hello',
+            '(time to )?wake up',
+            'get back to work',
         ]
-        subjects = [
-            'goodbye',
-            'hello',
-        ]
-        callback = self.say
-        super(ActivateCommand, self).__init__(actions=actions, subjects=subjects, callback=callback, name=name, always_active=True)
+        callback = self.activate
+        super(ActivateCommand, self).__init__(actions=actions, callback=callback, name=name, always_active=True)
 
-    def say(self, what):
-        if what == "hello":
-            self.sayHello()
-        elif what == "goodbye":
-            self.sayGoodbye()
-        else:
-            print("Unexpected subject {0} for command {1}".format(self.name, what))
-
-    def sayHello(self):
+    def activate(self, command):
         """
         Activates winston and returns a random, personalized greeting
         """
@@ -42,27 +32,13 @@ class ActivateCommand(Command):
 
         greetings = (
             'Good %s' % period,
-            'Good %s' % period,
-            'Greetings',
-            'Hello there',
-            'Hello',
-            'Hello, sir',
-            'Hi',
-            'Hi there',
-            'Howdy',
+            'Good %s, sir' % period,
+            'Good %s, sir. I am all ears.' % period,
+            'Greetings sir',
+            'Greetings sir. Is there anything I can do for you?',
+            'Hello sir',
+            'Hello sir. I missed you.',
+            'I am all ears sir',
+            'Hello sir. What can I do for you?',
         )
         text_to_speech(choice(greetings))
-
-    def sayGoodbye(self):
-        """
-        Deactivates winston
-        """
-        self.interpreter.active = False
-        goodbyes = (
-            'Goodbye',
-            'Cheerio!',
-            'Farewell',
-            'See you later',
-            'See you soon',
-        )
-        text_to_speech(choice(goodbyes))

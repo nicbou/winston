@@ -20,13 +20,18 @@ class Interpreter(object):
     # The actual commands. Expects a list of Command objects
     commands = ()
 
-    def __init__(self, commands):
+    def __init__(self, commands, scheduler=None):
         """
         Prepares the interpreter, compile the regex strings
         """
-        # Keep a reference to the interpreter
-        for command in commands:
+
+        # Keep a reference to the scheduler
+        self.scheduler = scheduler
+        
+        # Keep a reference to the interpreter, give command a unique name
+        for index, command in enumerate(commands):
             command.interpreter = self
+            command.name = 'cmd' + str(index)  # Every command needs a unique name. Any valid regex group name will do.
 
         self.commands = commands
         self.regex = self.regex()  # Build the command matcher
@@ -78,10 +83,11 @@ class Interpreter(object):
             for command in self.commands:
                 # Check if the command name matches a regex group
                 if command.name in groups and groups[command.name] is not None:
+                    print('matched ' + command.__class__.__name__)
+                    command_string = groups[command.name]  # The command without "Winston, please ... thank you"
                     subject = None
                     if command.subjects:
                         subject = groups[command.name + 'Subject']  # The group of the subject ('the lights' in 'turn on the lights')
-                    command.dispatch(subject)
-            print("???")
+                    command.dispatch(command_string, subject)
         else:
             print("Could not match '{0}' to a command using regex".format(command))

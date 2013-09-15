@@ -10,9 +10,9 @@ class Listener(object):
     python-gstreamer plugin.
 
     This class is loosely based on the example from the anemic
-    official documentation.
+    official pocketsphinx documentation.
     """
-    def __init__(self, interpreter, fsg_path="grammar.fsg", start=True):
+    def __init__(self, interpreters=[], fsg_path=None, dict_path=None, start=True):
         """
         Initialize the listener
         """
@@ -20,12 +20,13 @@ class Listener(object):
         # Don't have an FSG? Use sphinx_jsgf2fsg, or set it to None
         # to run pocketsphinx without a grammar (not recommended).
         self.fsg_path = fsg_path
+        self.dict_path = dict_path
 
         # Init gstreamer
         self.init_gstreamer()
 
-        # Get an interpreter
-        self.interpreter = interpreter
+        # Set the command interpreters
+        self.interpreters = interpreters
 
         # Start listening
         if start:
@@ -46,6 +47,9 @@ class Listener(object):
         if self.fsg_path:
             asr.set_property("fsg", self.fsg_path)
 
+        if self.dict_path:
+            asr.set_property("dict", self.dict_path)
+
         # This tells the asr that it's ready to run
         asr.set_property('configured', True)
 
@@ -57,7 +61,7 @@ class Listener(object):
     def asr_result(self, asr, parsed_text, utterance_id):
         """
         Receives a result from the pipeline, and forwards the parsed
-        text to process_result, which is intended to be overridden.
+        text to process_result.
         """
         self.pause()
         self.process_result(parsed_text)
@@ -71,7 +75,7 @@ class Listener(object):
 
     def process_result(self, parsed_text):
         """
-        Does something with the recognized sentence. Override this function
-        to define custom functionality.
+        Sends the command string to all interpreters for dispatching.
         """
-        self.interpreter.match(parsed_text)
+        for interpreter in self.interpreters:
+            interpreter.match(parsed_text)

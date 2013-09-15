@@ -1,18 +1,34 @@
 #JSGF V1.0;
 grammar commands;
-public <basicCmd> = (/10/<junkHoneypot> | /3/<signal> <startPolite> <command> <endPolite>);
+public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <endPolite>));
 <signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
-<command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> );
-    <say> = ( say | tell me | tell us ) <thingToSay>;
-        <thingToSay> = ( hello | goodbye | the weather | the temperature | a joke | the time | the date );
+<command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> | /5/<mealIdea> );
+
+    <say> = ( say | tell me | tell us | hello to our guests ) <thingToSay>;
+        <thingToSay> = ( the weather | the temperature | the time | the date );
+
+    <activate> = ( say hello | [time to] wake up | get back to work );
+    <deactivate> = ( say goodbye | go to sleep | deactivate yourself | stop listening );
+    <accountBalance> = 
+        (
+            [tell me | show me | read me ]
+            (
+                ( (what's | what is [there] | how much [do] i have | how much (is there|there is) ) in my [bank] account )
+                | ( (what's | what is) my [bank] account balance [like] )
+            )
+        )
+        | ( give me my account balance );
     <do> = ( <setAlarm> );
-        <setAlarm> = ( set an alarm | wake me up | wake us up ) [ tomorrow ] at <time>;
-            <time> = ( six | seven | eight | nine | ten | eleven ) [ fifteen | thirty | forty five ] [ tomorrow ];
+        <setAlarm> = ( set (an alarm|a reminder) | (ring|wake) (me|us) up ) ([ tomorrow ] at <absoluteTime> | in <relativeTime> (minutes|hours) [from now]);
+            <absoluteTime> = ( six | seven | eight | nine | ten | eleven ) [ fifteen | thirty | forty five ] [ tomorrow ];
+            <relativeTime> = ( <oneToTen> | <elevenToNineteen> | <twentyToNinety> );
+                <oneToTen> = ( one | two | three | four | five | six | seven | eight | nine | ten );
+                <elevenToNineteen> = ( eleven | twelve | thirteen | fourteen | fifteen | sixteen | seventeen | eighteen | nineteen );
+                <twentyToNinety> = ( twenty | thirty | forty | fifty | sixty | seventy | eighty | ninety ) [<oneToTen>];
     <question> = ( what time is it | what day is it | <nextBus> );
-        <nextBus> = when will the next bus pass;
+        <nextBus> = (when will the next bus (pass|arrive|come|stop) | when is the next bus (coming|arriving|passing|expected));
+    <mealIdea> = what (should|do|can) (i|we) eat (for ( dinner | supper ) | tonight );
     <openDoor> = ( open | unlock ) the door;
     <play> = play ( [ some ] music | something );
 <endPolite> = [ please ];
-
-<junkHoneypot> = ( a | the | will | can | be )*;

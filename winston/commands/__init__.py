@@ -12,6 +12,9 @@ class Command(object):
     object gives you the ability to keep application state and redefine how commands are
     dispatched.
     """
+    _interpreter = None
+    _callback = None
+
     def __init__(self, actions=[], subjects=[], callback=None, name='command', interpreter=None, always_active=False):
         self.name = name  # Used as a named group identifier in the regex
         self.actions = actions
@@ -20,22 +23,25 @@ class Command(object):
         self.interpreter = interpreter  # Reference to the interpreter that will run this command
         self.always_active = always_active  # This command will not run when the interpreter is inactive
 
-    def dispatch(self, subject):
+    def dispatch(self, command, subject):
         """
         Dispatches the command to the callback with the specified subject
         as a callback. Easily overridden.
+
+        command: The full matched command ('turn on the lights')
+        subject: The variable part of the command ('the lights')
         """
         # Don't perform actions if the interpreter isn't active
         if self.interpreter.active or (not self.interpreter) or self.always_active:
             # Validate the existence of a subject, if any are specified
             if not self.subjects:
-                self.callback()
+                self.callback(command)
             elif isinstance(self.subjects, (tuple, list)) and subject in self.subjects:
                 # Match a subject list
-                self.callback(subject)
+                self.callback(command, subject)
             elif (not isinstance(self.subjects, (tuple, list))) and re.match(self.subjects, subject):
                 # Match a regex subject
-                self.callback(subject)
+                self.callback(command, subject)
             else:
                 print("Subject {0} does not exist for command {1}".format(subject, self.name))
 
@@ -46,6 +52,7 @@ class Command(object):
         """
         # Build the command
         # e.g. (open|turn on) (the lights|the television)
+        command = ""
         if self.subjects:
             regex_actions = self.actions
             regex_subjects = self.subjects
@@ -64,9 +71,15 @@ class Command(object):
                 subject = regex_subjects,
             )
         else:
-            command = "({actions})".format(
-                actions = "|".join(self.actions),
-            )
+            regex_actions = self.actions
+
+            # If the actions is a list (and not a regex), join it into a single regex:
+            if isinstance(self.actions, (tuple, list)):
+                command = "({actions})".format(
+                    actions = "|".join(self.actions),
+                )
+            else:
+                command = regex_actions
 
         # Put the regex in a named group
         named_group = "(?P<{name}>({command}))".format(
@@ -76,3 +89,27 @@ class Command(object):
 
         # Return a regex pattern string
         return named_group
+
+    @property
+    def interpreter(self):
+        return self._interpreter
+
+    @interpreter.setter
+    def interpreter(self, value):
+        """
+        Since this function is called when the interpreter is set,
+        this is the perfect place to attach initiation logic that
+        concerns the command's Interpreter.
+
+        For example, this is the place to add events to the interpreter's
+        scheduler.
+        """
+        self._interpreter = value
+
+    @property
+    def callback(self):
+        return self._callback
+
+    @callback.setter
+    def callback(self, value):
+        self._callback = value
