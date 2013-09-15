@@ -77,6 +77,24 @@ You can easily add new commands to Winston:
 
 Make sure to open `config.py` it contains simple examples that will show you how to define commands. It also defines the path to your dictionary and grammar files.
 
+#### Proactive commands
+
+The default Interpreter offers access to a Scheduler object. This lets you set recurring events (e.g. Read the time hourly or set an alarm) and make Winston a bit more proactive.
+
+To do this, you need to extend the @interpreter.setter property as such:
+
+    @Command.interpreter.setter
+    def interpreter(self, value):
+        """
+        When attaching the interpreter to the command, add some timed events
+        to its scheduler.
+        """
+        Command.interpreter.fset(self, value)  # Call the parent setter
+
+        if self._interpreter:
+            # A sample scheduler event that occurs daily at 18:00
+            self._interpreter.scheduler.add_cron_job(self.say_balance, hour=18, minute=00)  # Reads the account balance at 17:30, daily
+
 ### Running Winston
 
 Once installed, run winston by running `python winston/`. You may also use it in your applications by importing the required modules in your own project. Look at `__main__.py` to see how Winston is started, and what classes come into play.

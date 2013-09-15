@@ -20,7 +20,7 @@ COMMANDS = [  # The list of commands passed to the interpreter
     say.SayCommand(),  # Simple command to get started
     activate.ActivateCommand(),  # Can activate winston
     deactivate.DeactivateCommand(),  # Can deactivate winston
-    account_balance.AccountBalanceCommand(),  # Lots of variation, uses regex actions
+    account_balance.AccountBalanceCommand(),  # Lots of variations, uses regex actions, and act proactively
     open_door.OpenDoorCommand(),
     set_alarm.AbsoluteAlarmCommand(),
     set_alarm.RelativeAlarmCommand(),
