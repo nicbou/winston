@@ -15,18 +15,8 @@ BUS_SCHEDULE_URL = "http://i-www.stm.info/en/lines/{line}/stops/{stop}/arrivals?
 BALANCE_PATH = "/var/www/scripts/winston_balance.txt"
 
 # Define your own commands and add them here
-from commands import say, activate, deactivate, account_balance, open_door, set_alarm, next_bus, dinner, Command
-COMMANDS = [  # The list of commands passed to the interpreter
-    say.SayCommand(),  # Simple command to get started
-    activate.ActivateCommand(),  # Can activate winston
-    deactivate.DeactivateCommand(),  # Can deactivate winston
-    account_balance.AccountBalanceCommand(),  # Lots of variations, uses regex actions, and act proactively
-    open_door.OpenDoorCommand(),
-    set_alarm.AbsoluteAlarmCommand(),
-    set_alarm.RelativeAlarmCommand(),
-    next_bus.NextBusCommand(),
-    dinner.DinnerCommand(),
-    Command(name='whatTime', actions=('what time is it',), callback=say.sayTime),  # A simple command
+COMMANDS = [
+
 ]
 
 # Define a scheduler to store scheduled events

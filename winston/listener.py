@@ -7,12 +7,10 @@ import gst
 class Listener(object):
     """
     Listens, understands and processes speeches using the
-    python-gstreamer plugin.
-
-    This class is loosely based on the example from the anemic
-    official pocketsphinx documentation.
+    python-gstreamer plugin. Notifies all attached interpreters
+    when input is received.
     """
-    def __init__(self, interpreters=[], fsg_path=None, dict_path=None, start=True):
+    def __init__(self, fsg_path=None, dict_path=None, start=True):
         """
         Initialize the listener
         """
@@ -25,14 +23,18 @@ class Listener(object):
         # Init gstreamer
         self.init_gstreamer()
 
-        # Set the command interpreters
-        self.interpreters = interpreters
+        # The command's interpreters
+        self.interpreters = []
 
         # Start listening
         if start:
             self.start()
 
     def init_gstreamer(self):
+        """
+        Init the gstreamer plugin that pipes its input to pocketsphinx to be recognized
+        """
+
         # Get the pipeline
         self.pipeline = gst.parse_launch('gconfaudiosrc ! audioconvert ! audioresample '
                                          + '! vader name=vad auto_threshold=true '
@@ -40,13 +42,13 @@ class Listener(object):
         asr = self.pipeline.get_by_name('asr')
 
         # Bind the pipeline results
-        # asr.connect('partial_result', self.asr_partial_result)
-        asr.connect('result', self.asr_result)
+        asr.connect('result', self.voice_input)
 
-        # Load the grammar file unless it was deactivated
+        # Load the grammar file
         if self.fsg_path:
             asr.set_property("fsg", self.fsg_path)
 
+        # Load the dictionary
         if self.dict_path:
             asr.set_property("dict", self.dict_path)
 
@@ -58,24 +60,47 @@ class Listener(object):
         
         self.pipeline.set_state(gst.STATE_PAUSED)
 
-    def asr_result(self, asr, parsed_text, utterance_id):
+    def voice_input(self, asr, parsed_text, utterance_id):
         """
-        Receives a result from the pipeline, and forwards the parsed
+        Receive a result from the pipeline, and forward the parsed
         text to process_result.
+
+        During the processing, voice recognition is paused so Winston
+        doesn't end up talking to himself.
         """
         self.pause()
-        self.process_result(parsed_text)
+        self.notify(parsed_text)
         self.start()
 
     def start(self):
+        """
+        Start listening
+        """
         self.pipeline.set_state(gst.STATE_PLAYING)
 
     def pause(self):
+        """
+        Stop listening
+        """
         self.pipeline.set_state(gst.STATE_PAUSED)
 
-    def process_result(self, parsed_text):
+    def register(self, interpreter):
         """
-        Sends the command string to all interpreters for dispatching.
+        Register interpreters to be notified of new input
+        """
+        if not interpreter in self.interpreters:
+            self.interpreters.append(interpreter)
+
+    def unregister(self, interpreter):
+        """
+        Unregisters an interpreter
+        """
+        if interpreter in self.interpreters:
+            self.interpreters.remove(interpreter)
+
+    def notify(self, event):
+        """
+        Notify all interpreters of a received input
         """
         for interpreter in self.interpreters:
-            interpreter.match(parsed_text)
+            interpreter.on_event(parsed_text, self)

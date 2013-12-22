@@ -2,92 +2,48 @@ import re
 
 class Interpreter(object):
     """
-    The interpreter turns matches commands with functions. It strongly relies
-    on the Command object, bundling them together into a bigger regex.
+    The interpreter turns matches command strings with the right Commands. It's
+    purpose is to notify all Commands of a new command string.
 
-    Strings come from the Listener, which is just a wrapper around pocketsphinx.
-    It only returns lowercase strings without punctuation.
+    The command strings come from the Listener, which is just a wrapper around pocketsphinx.
     """
 
-    # The name with which all commands begin. Can be a word or a regex.
-    # Example: jenkins, alfred, robot. "Jenkins! Turn on the lights!"
-    signal = "winston"
-
-    # Command prefixes and suffixes. Can be a tuple of words or a regex
-    prefixes = "( can you| could you)?( please)?"
-    suffixes = "( please)?"
-
-    # The actual commands. Expects a list of Command objects
-    commands = ()
-
-    def __init__(self, commands, scheduler=None):
+    def __init__(self, scheduler=None):
         """
-        Prepares the interpreter, compile the regex strings
+        Prepares the interpreter
         """
-
         # Keep a reference to the scheduler
         self.scheduler = scheduler
-        
-        # Keep a reference to the interpreter, give command a unique name
-        for index, command in enumerate(commands):
-            command.interpreter = self
-            command.name = 'cmd' + str(index)  # Every command needs a unique name. Any valid regex group name will do.
 
-        self.commands = commands
-        self.regex = self.regex()  # Build the command matcher
+        # The commands
+        self.commands = []
 
-        # Commands can access self.interpreter.active and decide whether or not
-        # to perform an action. Commands can also "shut down" winston by setting
-        # active to false.
-
-        # We still let the commands go through so a command can reactivate an
-        # interpreter.
-        self.active = True
-
-    def regex(self):
+    def register(self, command):
         """
-        Build a regex to match all possible commands
+        Registers new commands to the interpreter's events
         """
-        # Basic command structure
-        basic_command = "{signal}{prefix} {command}{suffix}"
+        if not command in self.commands:
+            self.commands.append(command)
 
-        # Build the command regex by joining individual regexes
-        # e.g. (command_1|command_2|command_3)
-        command_regexes = []
+    def unregister(self, command):
+        """
+        Unregisters a command from the interpreter's events
+        """
+        if command in self.commands:
+            self.commands.remove(command)
+
+    def notify(self, event):
+        """
+        Notifies all commands of a change in the state of
+        the interpreter.
+        """
         for command in self.commands:
-            command_regexes.append(command.regex)
-        command_regex = "({0})".format("|".join(command_regexes))
+            command.on_event(event, self)
 
-        # Wrap the command with the prefix and suffix regexes
-        final_regex = basic_command.format(
-            signal = self.signal,
-            command = command_regex,
-            prefix = self.prefixes,
-            suffix = self.suffixes,
-        )
-
-        # Return the compiled regex, ready to be used
-        return re.compile(final_regex)
-
-    def match(self, command):
-        # Try matching the command to an action
-        result = self.regex.match(command)
-        if result:
-            groups = result.groupdict()  # Get all the group matches from the regex
-
-            print("Got '%s'" % command)
-
-            if not self.active:
-                print("(interpreter is inactive)")
-
-            for command in self.commands:
-                # Check if the command name matches a regex group
-                if command.name in groups and groups[command.name] is not None:
-                    print('matched ' + command.__class__.__name__)
-                    command_string = groups[command.name]  # The command without "Winston, please ... thank you"
-                    subject = None
-                    if command.subjects:
-                        subject = groups[command.name + 'Subject']  # The group of the subject ('the lights' in 'turn on the lights')
-                    command.dispatch(command_string, subject)
-        else:
-            print("Could not match '{0}' to a command using regex".format(command))
+    def on_event(self, event, sender):
+        """
+        Handles events from the listener and other classes
+        it is registered to.
+        """
+        if self.active:
+            self.notify(event)
