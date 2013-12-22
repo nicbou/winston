@@ -56,7 +56,9 @@ To use Winston, you will need the following packages:
 
 You will also need `festival` so Winston can reply back to you. If you are using OS X, you can replace the call in utils.texttospeech.text_to_speech command to use the much better `say` command.
 
-*Important notes: Make sure you have up-to-date packages because some older versions will make your life much harder. There might be packages which I forgot about, so do not hesitate to open an issue or send an email if the instructions are incomplete or unclear. I take these to heart, and will respond as quickly as possible.*
+If you use virtualenv, make sure you supply the `--system-site-packages` option. This will include the python packages installed with the above packages.
+
+*Important notes: Make sure you have up-to-date packages because some older versions will make your life much harder. Do not hesitate to open an issue or send an email if the instructions are incomplete or unclear. I take these to heart, and will respond as quickly as possible.*
 
 ### Configuration options
 
