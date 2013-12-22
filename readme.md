@@ -51,6 +51,7 @@ To use Winston, you will need the following packages:
 * `gstreamer0.10-pocketsphinx`
 * `python-gst0.10`
 * `python-gobject`
+* `pocketsphinx-hmm-en-hub4wsj`
 * `sphinxbase-utils` to use `sphinx_jsgf2fsg`
 * `at` for some commands
 
