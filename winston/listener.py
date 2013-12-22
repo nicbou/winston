@@ -68,8 +68,9 @@ class Listener(object):
         During the processing, voice recognition is paused so Winston
         doesn't end up talking to himself.
         """
+        print('Listener received: {0}'.format(parsed_text))
         self.pause()
-        self.notify(parsed_text)
+        self.notify({'text': parsed_text})
         self.start()
 
     def start(self):
@@ -103,4 +104,4 @@ class Listener(object):
         Notify all interpreters of a received input
         """
         for interpreter in self.interpreters:
-            interpreter.on_event(parsed_text, self)
+            interpreter.on_event(event, self)

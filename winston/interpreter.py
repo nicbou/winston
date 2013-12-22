@@ -45,5 +45,6 @@ class Interpreter(object):
         Handles events from the listener and other classes
         it is registered to.
         """
-        if self.active:
-            self.notify(event)
+        print('Interpreter received: {0}'.format(event['text']))
+
+        self.notify(event)
