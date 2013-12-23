@@ -15,12 +15,13 @@ BUS_SCHEDULE_URL = "http://i-www.stm.info/en/lines/{line}/stops/{stop}/arrivals?
 BALANCE_PATH = "/var/www/scripts/winston_balance.txt"
 
 # Define your own commands and add them here
-from commands import account_balance, hello, goodbye, dinner
+from commands import account_balance, hello, goodbye, dinner, next_bus
 COMMANDS = [
     account_balance.AccountBalanceCommand(),
     hello.HelloCommand(),
     goodbye.GoodbyeCommand(),
     dinner.DinnerCommand(),
+    next_bus.NextBusCommand(),
 ]
 
 # Define a scheduler to store scheduled events

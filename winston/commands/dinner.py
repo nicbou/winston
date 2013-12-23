@@ -4,7 +4,7 @@ from utils.texttospeech import text_to_speech
 
 class DinnerCommand(RegexCommand):
     """
-    Activates winston's interpreter
+    Returns dinner ideas
     """
     def __init__(self, name='command'):
         """
@@ -12,11 +12,11 @@ class DinnerCommand(RegexCommand):
         """
         regex = "what (should|do|can) (i|we) eat (for (dinner|supper)|tonight)"
 
-        super(DinnerCommand, self).__init__(regex, True)
+        super(DinnerCommand, self).__init__(regex, False)
 
     def on_event(self, event, sender):
         """
-        Deactivates winston and returns a random, personalized farewell
+        Suggests a dinner idea
         """
         if self.match(event['text']):
             sentences = (
@@ -54,6 +54,8 @@ class DinnerCommand(RegexCommand):
             'shepherd\'s pie',
             'pizza',
             'ramen soup',
-            'take out food'
+            'take out food',
+            'sushi',
+            'thai chicken',
         )
         return choice(choices)
