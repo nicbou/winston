@@ -8,11 +8,8 @@ class AccountBalanceCommand(RegexCommand):
     """
     def __init__(self, name='command'):
         """
-        Returns a regex string matching the command.
+        Build the basic regex command
         """
-
-        #Build the basic regex command
-
         format1_part1 = "(tell me |show me |read me )?"
         format1_part2_v1 = "((what's |what is )?my (bank )?account balance(like)?)"
         format1_part2_v2 = "((what's |what is (there )?|how much (do )?i have |how much (is there |there is ))in my (bank )?account)"
