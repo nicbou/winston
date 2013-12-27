@@ -10,7 +10,7 @@ class DinnerCommand(RegexCommand):
         """
         Build the basic regex command
         """
-        regex = "what (should|do|can) (i|we) eat (for (dinner|supper)|tonight)"
+        regex = "winston what (should|do|can) (i|we) eat ((for (dinner|supper))|tonight)"
 
         super(DinnerCommand, self).__init__(regex, False)
 
