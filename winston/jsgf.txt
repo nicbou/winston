@@ -1,12 +1,12 @@
 #JSGF V1.0;
 grammar commands;
-public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <endPolite>));
+public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <endPolite>) | /10/(<signal> <standaloneCommand>));
 <signal> = (winston);
 <startPolite> = [ can you | could you ] [ please ];
 <command> = ( /8/<say> | /8/<openDoor> | /8/<do> | /8/<question> | /5/<play> | /5/<activate> | /5/<deactivate> | /5/<accountBalance> | /5/<mealIdea> );
-
-    <say> = ( say | tell me | tell us | hello to our guests ) <thingToSay>;
-        <thingToSay> = ( the weather | the temperature | the time | the date );
+    <say> = ( say | tell me | tell us ) <thingToSay>;
+        <thingToSay> = ( the weather | the temperature | the time | the date | <weather> );
+            <weather> = ( (if|whether) ( (it will (snow|rain))|((snow|rain) is expected) ) [today] );
 
     <activate> = ( say hello | [time to] wake up | get back to work );
     <deactivate> = ( say goodbye | go to sleep | deactivate yourself | stop listening );
@@ -32,3 +32,6 @@ public <basicCmd> = ( /2/((GARBAGE)+) | /10/(<signal> <startPolite> <command> <e
     <openDoor> = ( open | unlock ) the door;
     <play> = play ( [ some ] music | something );
 <endPolite> = [ please ];
+
+<standaloneCommand> = (<weatherStandalone>);
+    <weatherStandalone> = ((is (snow|rain) expected) [today]) | (will it (snow|rain) [today]) | (is it (gonna|going to) (snow|rain) [today]);
