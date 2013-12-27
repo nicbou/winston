@@ -25,7 +25,7 @@ GRAMMAR_FILE = os.path.join(SCRIPT_PATH, "grammar.fsg")
 DICT_FILE = os.path.join(SCRIPT_PATH, "dict.dic")
 
 # Define your own commands and add them here
-from commands import account_balance, hello, goodbye, dinner, next_bus, set_alarm, weather
+from commands import account_balance, hello, goodbye, dinner, next_bus, set_alarm, weather, date
 COMMANDS = [
     account_balance.AccountBalanceCommand(),
     hello.HelloCommand(),
@@ -35,4 +35,5 @@ COMMANDS = [
     set_alarm.RelativeAlarmCommand(),
     set_alarm.AbsoluteAlarmCommand(),
     weather.WeatherCommand(),
+    date.DateTimeCommand(),
 ]
