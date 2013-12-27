@@ -1,8 +1,9 @@
-from utils.texttospeech import text_to_speech, spell_integer
+from utils.texttospeech import text_to_speech
 from commands import RegexCommand
 from json import load
 from urllib2 import urlopen
-from config import WEATHER_URL
+from config import WEATHER_API_URL
+from random import choice
 
 class WeatherCommand(RegexCommand):
     """
@@ -12,7 +13,10 @@ class WeatherCommand(RegexCommand):
         """
         Build the basic regex command
         """
-        regex = '(say|tell me|tell us) the (weather|temperature)'
+        regex_willrain = "( (if|whether) it will (rain|snow)( today)?)"
+        regex_expected = "( (if|whether) (rain|snow) is expected( today)?)"
+        regex_weather = "( the (weather|temperature))"
+        regex = '(say|tell me|tell us)({0}|{1}|{2})'.format(regex_weather,regex_willrain,regex_expected)
 
         super(WeatherCommand, self).__init__(regex, True)
 
@@ -23,24 +27,59 @@ class WeatherCommand(RegexCommand):
         """
         if self.match(event['text']):
             try:
-                data = urlopen(WEATHER_URL, timeout=5)
+                data = urlopen(WEATHER_API_URL, timeout=5)
             except:
                 text_to_speech("I am afraid I cannot get the weather, sorry.")
             else:
-                cities = load(data)
+                json = load(data)
 
-                if cities['count'] == 0:
-                    text_to_speech("I am afraid I cannot get the weather, sorry.")
+                current_temp = int(json['currently']['apparentTemperature'])
+                min_temp = int(json['daily']['data'][0]['temperatureMin'])
+                max_temp = int(json['daily']['data'][0]['temperatureMax'])
+                precip_probability = int(json['daily']['data'][0]['precipProbability'])
+                precip_type = json['daily']['data'][0]['precipType']
+                current_weather = json['daily']['data'][0]['summary']
+
+                output = ""
+
+                if "temperature" in event['text']:
+                    output = "It is {0} degrees outside.".format(current_temp)
+                elif "rain" in event['text']:
+                    if precip_probability < 15:
+                        answers = (
+                            "Not a chance in the world, sir.",
+                            "I highly doubt so.",
+                            "No sir",
+                            "No rainfall expected, sir.",
+                            "No rain is expected today",
+                            "You can leave your umbrella at home. It will not rain today.",
+                        )
+                        output = choice(answers)
+                    else:
+                        if precip_type == "rain":
+                            output = "There is a {0} percent chance of rain for the day".format(precip_probability)
+                        else:
+                            output = "There is a {0} percent chance of {1} for the day, but no rain is expected".format(precip_probability, precip_type)
+                elif "snow" in event['text']:
+                    if precip_probability < 15:
+                        answers = (
+                            "Not a chance in the world, sir.",
+                            "I highly doubt so.",
+                            "No sir",
+                            "No snowfall expected, sir.",
+                            "No snow is expected today",
+                        )
+                        output = choice(answers)
+                    else:
+                        if precip_type == "snow":
+                            output = "There is a {0} percent chance of snow for the day".format(precip_probability)
+                        else:
+                            output = "There is a {0} percent chance of {1} for the day, but no snow is expected".format(precip_probability, precip_type)
                 else:
-                    city = cities['list'][0]
-                    current_temp = spell_integer(int(city['main']['temp']))
-                    max_temp = spell_integer(int(city['main']['temp_max']))
-                    current_weather = city['weather'][0]['description']
-
-                    output = "{weather} with a temperature of {temp} and a maximum of {maxtemp}.".format(
+                    output = "{weather} with a temperature between {min} and {max}.".format(
                         weather = current_weather,
-                        temp = current_temp,
-                        maxtemp = max_temp,
+                        min = min_temp,
+                        max = max_temp,
                     )
 
-                    text_to_speech(output)
+                text_to_speech(output)
