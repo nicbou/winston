@@ -4,12 +4,17 @@ from json import load
 from urllib2 import urlopen
 from config import WEATHER_API_URL
 from random import choice
+from datetime import datetime, timedelta
 import re
 
 class WeatherCommand(RegexCommand):
     """
     Reads the weather
     """
+
+    #The last weather report (in JSON) and the time at which it was fetched
+    last_report = None
+    last_report_time = None
 
     def __init__(self):
         """
@@ -45,11 +50,15 @@ class WeatherCommand(RegexCommand):
         """
         if self.match(event['text']):
             try:
-                data = urlopen(WEATHER_API_URL, timeout=5)
+                if self.match(event['text']):
+                    if not self.last_report_time or (datetime.now()-self.last_report_time) > timedelta(minutes=30):
+                        print("Fetching weather report from Forecast.io")
+                        self.last_report = load(urlopen(WEATHER_API_URL, timeout=5))
+                        self.last_report_time = datetime.now()
             except:
                 text_to_speech("I am afraid I cannot get the weather, sorry.")
             else:
-                json = load(data)
+                json = self.last_report
 
                 current_temp = int(json['currently']['apparentTemperature'])
                 min_temp = int(json['daily']['data'][0]['temperatureMin'])
