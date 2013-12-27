@@ -1,4 +1,4 @@
-from commands import Command
+from commands import RegexCommand
 from datetime import time
 from os import system
 from random import choice
@@ -9,72 +9,78 @@ one_to_ten = ('one','two','three','four','five','six','seven','eight','nine','te
 eleven_to_nineteen = ('eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen',)
 twenty_to_ninety = ('twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety',)
 
-class AbsoluteAlarmCommand(Command):
+class AbsoluteAlarmCommand(RegexCommand):
     """
     Sets an alarm at an absolute time (8, 10, etc)
-    """
-    def __init__(self, name='command'):
+    """    
+    def __init__(self):
+        """
+        Build the basic regex command
+        """
+        regex = "(set (an alarm|a reminder)|(ring|wake) (me|us) up)( tomorrow)? at (six|seven|eight|nine|ten|eleven)( fifteen| thirty| forty five)?( tomorrow)?"
 
-        self.actions = '(set (an alarm|a reminder)|(ring|wake) (me|us) up)( tomorrow)? at'
-        self.subjects = '(six|seven|eight|nine|ten|eleven)( fifteen| thirty| forty five)?( tomorrow)?'
+        super(AbsoluteAlarmCommand, self).__init__(regex, True)
 
-        super(AbsoluteAlarmCommand, self).__init__(actions=self.actions, subjects=self.subjects, callback=self.set_alarm, name=name)
+    def on_event(self, event, sender):
+        """
+        Sets an alarm
+        """
+        if self.match(event['text']):
+            # Remove the clutter
+            when = event['text'].replace('tomorrow', '')
 
-    def set_alarm(self, command, when):
-        # Remove the clutter
-        when = when.replace('tomorrow', '')
+            #Parse the number
+            time_value = text_to_time(when)
+            time_string = time_value.strftime("%H:%M")
+            command = 'echo python {script} "{message}" | at -m {time}AM'
 
-        #Parse the number
-        time_value = text_to_time(when)
-        time_string = time_value.strftime("%H:%M")
-        command = 'echo python {script} "{message}" | at -m {time}AM'
+            messages = [
+                "Sir, you asked me to set an alarm at this precise moment.",
+                "It is time sir. You asked me to set an alarm at this precise moment.",
+                "Hello sir. You asked me to wake you up at this time.",
+            ]
 
-        messages = [
-            "Sir, you asked me to set an alarm at this precise moment.",
-            "It is time sir. You asked me to set an alarm at this precise moment.",
-            "Hello sir. You asked me to wake you up at this time.",
-        ]
-
-        system(command.format(script=tts_path, time=time_string, message=choice(messages)))
-        text_to_speech("Setting an alarm in " + when )
+            system(command.format(script=tts_path, time=time_string, message=choice(messages)))
+            text_to_speech("Setting an alarm at " + when )
 
 
-class RelativeAlarmCommand(Command):
+class RelativeAlarmCommand(RegexCommand):
     """
     Sets an alarm at a relative time (in 8 minutes, in 20 hours)
     """
     def __init__(self, name='command'):
-        self.actions = '(set (an alarm|a reminder)|(ring|wake) (me|us) up) in'
-        self.subjects = "((%s)|(%s)|(%s)( (%s))?) minutes( from now)?" % (
+        actions = '(set (an alarm|a reminder)|(ring|wake) (me|us) up) in'
+        subjects = "((%s)|(%s)|(%s)( (%s))?) minutes( from now)?" % (
             '|'.join(one_to_ten),
             '|'.join(eleven_to_nineteen),
             '|'.join(twenty_to_ninety),
             '|'.join(one_to_ten),
         )
-        super(RelativeAlarmCommand, self).__init__(actions=self.actions, subjects=self.subjects, callback=self.set_alarm, name=name)
+        regex = "{0} {1}".format(actions, subjects)
+        super(RelativeAlarmCommand, self).__init__(regex, True)
 
-    def set_alarm(self, command, when):
+    def on_event(self, event, sender):
         """
-        Sets an alarm using the 'at' command.
+        Sets an alarm
         """
+        if self.match(event['text']):
+            # Remove the clutter
+            when = event['text'].replace(' minutes', '')
+            when.replace(' from now', '')
 
-        # Remove the clutter
-        when.replace(' minutes', '')
-        when.replace(' from now', '')
+            #Parse the number
+            if "hours" in when:
+                command = 'echo python {script} "{message}" | at now + {time} hours'
+            else:
+                command = 'echo python {script} "{message}" | at now + {time} minutes'
 
-        #Parse the number
-        if "hours" in when:
-            command = 'echo python {script} "{message}" | at now + {time} hours'
-        else:
-            command = 'echo python {script} "{message}" | at now + {time} minutes'
+            messages = [
+                "Sir, {time} ago, you asked me to set an alarm at this precise moment.".format(time=when),
+                "It is time sir. You asked me to set an alarm at this precise moment {time} ago.".format(time=when),
+            ]
 
-        messages = [
-            "Sir, {time} ago, you asked me to set an alarm at this precise moment.".format(time=when),
-            "It is time sir. You asked me to set an alarm at this precise moment {time} ago.".format(time=when),
-        ]
-
-        system(command.format(script=tts_path, time=text_to_number(when), message=choice(messages)))
-        text_to_speech("Setting an alarm in " + when )
+            system(command.format(script=tts_path, time=text_to_number(when), message=choice(messages)))
+            text_to_speech("Setting an alarm in " + when )
 
 
 def text_to_number(text):

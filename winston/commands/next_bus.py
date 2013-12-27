@@ -9,7 +9,7 @@ class NextBusCommand(RegexCommand):
     """
     Finds the next bus using the STM API
     """
-    def __init__(self, name='command'):
+    def __init__(self):
         """
         Build the basic regex command
         """

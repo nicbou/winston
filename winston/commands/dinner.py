@@ -6,7 +6,7 @@ class DinnerCommand(RegexCommand):
     """
     Returns dinner ideas
     """
-    def __init__(self, name='command'):
+    def __init__(self):
         """
         Build the basic regex command
         """

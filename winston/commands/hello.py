@@ -7,7 +7,7 @@ class HelloCommand(RegexCommand):
     """
     Activates winston's interpreter
     """
-    def __init__(self, name='command'):
+    def __init__(self):
         """
         Build the basic regex command
         """
